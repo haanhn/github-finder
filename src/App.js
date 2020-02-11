@@ -11,8 +11,9 @@ import About from './components/pages/About';
 import GithubState from './context/github/GithubState';
 
 const App = () => {
-  const [users, setUsers] = useState([]);
-  const [user, setUser] = useState({});
+  //no need for users and setUsers because users is not in state of App but in githubContext
+  // const [users, setUsers] = useState([]);
+  // const [user, setUser] = useState({}); 
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState(null);
@@ -35,14 +36,8 @@ const App = () => {
   //Search Users
   //moved to GithubState
 
-  //Get a single User
-  const getUser = async (username) => {
-    setLoading(true);
-    const res = await axios.get(`https://api.github.com/users/${username}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
-    // this.setState({ user: res.data, loading: false });
-    setUser(res.data);
-    setLoading(false);
-  }
+  //Get a single User: moved to githubState
+  
 
   //Get User's repos
   const getUserRepos = async (username) => {
@@ -53,12 +48,7 @@ const App = () => {
     setLoading(false);
   }
 
-  //Clear Users
-  const clearUsers = () => {
-    // this.setState({ users: [] });
-    setUsers([]);
-    setLoading(false);
-  }
+  //Clear Users: moved to githubContext
 
   //Set Alert
   const showAlert = (msg, type) => {
@@ -90,11 +80,13 @@ const App = () => {
                   <Fragment>
                     <Search
                       // searchUsers={searchUsers.bind(this)}
-                      //no need to pass as props: just access context githubContext directly
-                      clearUsers={clearUsers}
-                      showClear={users.length > 0 ? true : false}
+                      //no need : searchUsers, clearUsers, showClear 
+                      // to pass as props: just access context githubContext directly
                       setAlert={showAlert} />
-                    <Users users={users} loading={loading} />
+
+                    {/* --> No need Users.props.users or Users.props.loading
+                    Because users is now in githubContext, no need to pass it as props */}
+                    <Users />
                   </Fragment>
                 )}
               />
@@ -102,9 +94,10 @@ const App = () => {
               <Route exact path='/user/:loginName'
                 render={(abc) => (
                   <User {...abc} randomName={abc.match}
-                    getUser={getUser} user={user}
+                    // getUser={getUser} user={user} : no need
                     getUserRepos={getUserRepos} repos={repos}
-                    loading={loading} />
+                    // loading={loading} : no need
+                    />
                   // for desctructuring props <User {...abc} getUser={this.getUser} user={user} loading={loading}/>
                 )}
               />

@@ -2,8 +2,8 @@ import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import GithubContext from '../../context/github/githubContext';
 
-const Search = ({ showClear, clearUsers, setAlert }) => {
-    //searchUsers is removed from props
+const Search = ({ setAlert }) => {
+    //searchUsers, showClear, clearUsers is removed from props
     //access searchUsers directly through context -> no need to pass down searchUsers as props from [C]:App
     const githubContext = useContext(GithubContext);
 
@@ -33,8 +33,8 @@ const Search = ({ showClear, clearUsers, setAlert }) => {
                     onChange={valueOnChange} />
                 <input type='submit' value='Search' className='btn btn-dark btn-block' />
             </form>
-            {showClear &&
-                (<button className='btn btn-light btn-block' onClick={clearUsers}>
+            {githubContext.users.length > 0 &&
+                (<button className='btn btn-light btn-block' onClick={githubContext.clearUsers}>
                     Clear
                 </button>)
             }
@@ -42,11 +42,15 @@ const Search = ({ showClear, clearUsers, setAlert }) => {
     );
 }
 
+//no need for propTypes searchUsers, showClear, clearUsers 
+//because they are not passed as props from [C] App anymore
+//access them directly from githubContext
+
 Search.propTypes = {
-    searchUsers: PropTypes.func.isRequired,
-    clearUsers: PropTypes.func.isRequired,
+    // searchUsers: PropTypes.func.isRequired,
+    // clearUsers: PropTypes.func.isRequired,
     setAlert: PropTypes.func.isRequired,
-    showClear: PropTypes.bool.isRequired
+    // showClear: PropTypes.bool.isRequired
 };
 
 export default Search;

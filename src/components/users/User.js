@@ -1,12 +1,18 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useContext } from 'react';
 import Spinner from '../layout/Spinner';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Repos from '../repos/Repos';
+import GithubContext from '../../context/github/githubContext';
 
 const User = (props) => {
-    const {getUser, getUserRepos} = props;
-    const {user, repos, loading} = props;
+    //access directly from githubContext
+    const githubContext = useContext(GithubContext);
+    const { user, getUser, loading } = githubContext;
+
+    //remove getUser, user, loading  from props
+    const {getUserRepos} = props;
+    const {repos} = props;
     
     useEffect(() => {
         const loginName = props.randomName.params.loginName;
@@ -95,10 +101,11 @@ const User = (props) => {
 
 }
 
+//no need
 User.propTypes = {
-    loading: PropTypes.bool,
-    getUser: PropTypes.func.isRequired,
-    user: PropTypes.object.isRequired,
+    // loading: PropTypes.bool,
+    // getUser: PropTypes.func.isRequired,
+    // user: PropTypes.object.isRequired,
     getUserRepos: PropTypes.func.isRequired,
     repos: PropTypes.array
 };
