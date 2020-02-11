@@ -101,11 +101,8 @@ const User = (props) => {
 
 }
 
-//no need
+//no need propsTypes: loading, getUser, user
 User.propTypes = {
-    // loading: PropTypes.bool,
-    // getUser: PropTypes.func.isRequired,
-    // user: PropTypes.object.isRequired,
     getUserRepos: PropTypes.func.isRequired,
     repos: PropTypes.array
 };

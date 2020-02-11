@@ -11,9 +11,8 @@ import About from './components/pages/About';
 import GithubState from './context/github/GithubState';
 
 const App = () => {
-  //no need for users and setUsers because users is not in state of App but in githubContext
-  // const [users, setUsers] = useState([]);
-  // const [user, setUser] = useState({}); 
+  //no need for useState() of users and setUsers,.. 
+  //because users is not in state of App but in githubContext
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState(null);
@@ -78,11 +77,8 @@ const App = () => {
                 path='/'
                 render={props => (
                   <Fragment>
-                    <Search
-                      // searchUsers={searchUsers.bind(this)}
-                      //no need : searchUsers, clearUsers, showClear 
-                      // to pass as props: just access context githubContext directly
-                      setAlert={showAlert} />
+                    <Search setAlert={showAlert} />
+                      {/* no need : searchUsers, clearUsers, showClear  */}
 
                     {/* --> No need Users.props.users or Users.props.loading
                     Because users is now in githubContext, no need to pass it as props */}
@@ -94,10 +90,9 @@ const App = () => {
               <Route exact path='/user/:loginName'
                 render={(abc) => (
                   <User {...abc} randomName={abc.match}
-                    // getUser={getUser} user={user} : no need
                     getUserRepos={getUserRepos} repos={repos}
-                    // loading={loading} : no need
                     />
+                    //no need passing getUser, user, loading to User as props
                   // for desctructuring props <User {...abc} getUser={this.getUser} user={user} loading={loading}/>
                 )}
               />

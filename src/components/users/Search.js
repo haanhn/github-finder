@@ -47,10 +47,7 @@ const Search = ({ setAlert }) => {
 //access them directly from githubContext
 
 Search.propTypes = {
-    // searchUsers: PropTypes.func.isRequired,
-    // clearUsers: PropTypes.func.isRequired,
     setAlert: PropTypes.func.isRequired,
-    // showClear: PropTypes.bool.isRequired
 };
 
 export default Search;
