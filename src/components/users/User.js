@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useContext } from 'react';
 import Spinner from '../layout/Spinner';
-import PropTypes from 'prop-types';
+//no need to import propsTypes: loading, getUser, user, getUserRepos, repos
 import { Link } from 'react-router-dom';
 import Repos from '../repos/Repos';
 import GithubContext from '../../context/github/githubContext';
@@ -8,14 +8,12 @@ import GithubContext from '../../context/github/githubContext';
 const User = (props) => {
     //access directly from githubContext
     const githubContext = useContext(GithubContext);
-    const { user, getUser, loading } = githubContext;
+    const { user, getUser, loading, getUserRepos, repos } = githubContext;
 
-    //remove getUser, user, loading  from props
-    const {getUserRepos} = props;
-    const {repos} = props;
+    //remove getUser, user, loading, getUserRepos, repos  from props
     
     useEffect(() => {
-        const loginName = props.randomName.params.loginName;
+        const loginName = props.match.params.loginName;
         getUser(loginName);
         getUserRepos(loginName);
         //for disabling warning not using dependencies in useEffect
@@ -100,11 +98,5 @@ const User = (props) => {
     );
 
 }
-
-//no need propsTypes: loading, getUser, user
-User.propTypes = {
-    getUserRepos: PropTypes.func.isRequired,
-    repos: PropTypes.array
-};
 
 export default User;

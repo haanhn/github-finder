@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import axios from 'axios';
 import './App.css';
 import Navbar from './components/layout/Navbar';
 import Users from './components/users/Users';
@@ -11,10 +10,8 @@ import About from './components/pages/About';
 import GithubState from './context/github/GithubState';
 
 const App = () => {
-  //no need for useState() of users and setUsers,.. 
+  //no need for useState() of users and setUsers, user, setUser, repos, setRepos, loading, setLoading.. 
   //because users is not in state of App but in githubContext
-  const [repos, setRepos] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState(null);
 
   // async componentDidMount() {
@@ -38,14 +35,7 @@ const App = () => {
   //Get a single User: moved to githubState
   
 
-  //Get User's repos
-  const getUserRepos = async (username) => {
-    setLoading(true);
-    const res = await axios.get(`https://api.github.com/users/${username}/repos?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
-    // this.setState({ repos: res.data, loading: false });
-    setRepos(res.data);
-    setLoading(false);
-  }
+  //Get User's repos: moved to  githubState
 
   //Clear Users: moved to githubContext
 
@@ -87,13 +77,17 @@ const App = () => {
                 )}
               />
               <Route exact path='/about' component={About} />
-              <Route exact path='/user/:loginName'
-                render={(abc) => (
-                  <User {...abc} randomName={abc.match}
-                    getUserRepos={getUserRepos} repos={repos}
+              <Route exact path='/user/:loginName' component={User}
+                // render={(abc) => (
+                  // <User randomName={abc.match}
                     />
-                    //no need passing getUser, user, loading to User as props
-                  // for desctructuring props <User {...abc} getUser={this.getUser} user={user} loading={loading}/>
+                    {/* !!! NO NEED to use render prop ---> use component prop
+                        ---> remember to change in User: props.randomName -> props.match 
+                    */}
+
+
+                    {/* //no need passing getUser, user, loading, getUserRepos, repos to User as props */}
+                    {/* // for desctructuring props <User {...abc} getUser={this.getUser} user={user} loading={loading}/> */}
                 )}
               />
             </Switch>
