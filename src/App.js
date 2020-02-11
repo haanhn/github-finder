@@ -8,6 +8,7 @@ import User from './components/users/User';
 import Search from './components/users/Search';
 import Alert from './components/layout/Alert';
 import About from './components/pages/About';
+import GithubState from './context/github/GithubState';
 
 const App = () => {
   const [users, setUsers] = useState([]);
@@ -29,17 +30,10 @@ const App = () => {
   //   this.setState({ users: res.data, loading: false });
 
   //   console.log('After App_compDidMount()');
-  // }
+  // }  
 
   //Search Users
-  const searchUsers = async (value) => {
-    setLoading(true);
-    const res = await axios.get(`https://api.github.com/search/users?q=${value}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
-    const users = res.data.items;
-    // this.setState({ users: users, loading: false });
-    setUsers(users);
-    setLoading(false);
-  }
+  //moved to GithubState
 
   //Get a single User
   const getUser = async (username) => {
@@ -72,7 +66,7 @@ const App = () => {
     //   alert: { msg: msg, type: type }
     // });
     setAlert({ msg: msg, type: type });
-    
+
     setTimeout(() => {
       setAlert(null);
     }, 3000);
@@ -81,41 +75,44 @@ const App = () => {
 
   console.log('App_render()');
   return (
-    <Router>
-      <div className="App">
-        <Navbar iconClass='fab fa-github-alt' />
+    <GithubState>
+      <Router>
+        <div className="App">
+          <Navbar iconClass='fab fa-github-alt' />
 
-        <div className='container'>
-          <Alert alert={alert} />
-          <Switch>
-            <Route
-              exact
-              path='/'
-              render={props => (
-                <Fragment>
-                  <Search
-                    searchUsers={searchUsers.bind(this)}
-                    clearUsers={clearUsers}
-                    showClear={users.length > 0 ? true : false}
-                    setAlert={showAlert} />
-                  <Users users={users} loading={loading} />
-                </Fragment>
-              )}
-            />
-            <Route exact path='/about' component={About} />
-            <Route exact path='/user/:loginName'
-              render={(abc) => (
-                <User {...abc} randomName={abc.match}
-                  getUser={getUser} user={user}
-                  getUserRepos={getUserRepos} repos={repos}
-                  loading={loading} />
-                // for desctructuring props <User {...abc} getUser={this.getUser} user={user} loading={loading}/>
-              )}
-            />
-          </Switch>
+          <div className='container'>
+            <Alert alert={alert} />
+            <Switch>
+              <Route
+                exact
+                path='/'
+                render={props => (
+                  <Fragment>
+                    <Search
+                      // searchUsers={searchUsers.bind(this)}
+                      //no need to pass as props: just access context githubContext directly
+                      clearUsers={clearUsers}
+                      showClear={users.length > 0 ? true : false}
+                      setAlert={showAlert} />
+                    <Users users={users} loading={loading} />
+                  </Fragment>
+                )}
+              />
+              <Route exact path='/about' component={About} />
+              <Route exact path='/user/:loginName'
+                render={(abc) => (
+                  <User {...abc} randomName={abc.match}
+                    getUser={getUser} user={user}
+                    getUserRepos={getUserRepos} repos={repos}
+                    loading={loading} />
+                  // for desctructuring props <User {...abc} getUser={this.getUser} user={user} loading={loading}/>
+                )}
+              />
+            </Switch>
+          </div>
         </div>
-      </div>
-    </Router>
+      </Router>
+    </GithubState>
   );
 }
 

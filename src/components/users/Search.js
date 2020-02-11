@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
+import GithubContext from '../../context/github/githubContext';
 
-const Search = ({ showClear, searchUsers, clearUsers, setAlert }) => {
+const Search = ({ showClear, clearUsers, setAlert }) => {
+    //searchUsers is removed from props
+    //access searchUsers directly through context -> no need to pass down searchUsers as props from [C]:App
+    const githubContext = useContext(GithubContext);
+
     const [searchedValue, setText] = useState('');
 
     const valueOnChange = (e) => setText(e.target.value);
@@ -12,7 +17,7 @@ const Search = ({ showClear, searchUsers, clearUsers, setAlert }) => {
         if (searchedValue === '') {
             setAlert('This field is required', 'light');
         } else {
-            searchUsers(searchedValue);
+            githubContext.searchUsers(searchedValue);
             setText('');
         }
     }
